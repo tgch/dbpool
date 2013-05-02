@@ -36,6 +36,7 @@ void DBConfigHandler::startElement(const std::string& name,
 		ser.port = findAttr(attr, "port");
 		ser.user = findAttr(attr, "user");
 		ser.pass = findAttr(attr, "pass");
+		ser.db = findAttr(attr, "db");
 		ser.coreSize = findAttrAsInt(attr, "coreSize", 1);
 		ser.maxSize = findAttrAsInt(attr, "maxSize", 10);
 		ser.idleTimeSeconds = findAttrAsInt(attr, "idleTimeSeconds", 60);
@@ -55,6 +56,9 @@ void DBConfigHandler::startElement(const std::string& name,
 		_current_value.str("");
 		_current_value.clear();
 	} else if (name == "pass") {
+		_current_value.str("");
+		_current_value.clear();
+	} else if (name == "db") {
 		_current_value.str("");
 		_current_value.clear();
 	} else if (name == "coreSize") {
@@ -180,7 +184,7 @@ bool DBPoolServerI::_reload() {
 		_data = data;
 	}
 
-	std::set<idl::DBPoolClientPrx, DBPoolClientPrxLessTo> clients;
+	std::set<idl::DBPoolClientPrx> clients;
 	{
 		IceUtil::Mutex::Lock lock(_mutex_clients);
 		clients = _clients;
